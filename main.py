@@ -1,22 +1,24 @@
+from time import sleep
 from utils import *
 
 
 def main():
-    devices = detectDevices()
     while True:
         devices = detectDevices()
-        cameraId = print(checkCamera(devices))
+        cameraId = checkCamera(devices)
         if (cameraId != ""):
             log("Camera recognized correctly.")
+            sleep(3)
             break
 
     with open("config.json") as f:
         d = json.load(f)
+        id = d["supported_cameras"][0]["id"]
         folder = d["supported_cameras"][0]["folder"]
 
-    createFileStruct(cameraId)
+    createFileStruct(id)
     downloadFiles(f"/media/{getUsername()}/{folder}/DCIM",
-                  os.path.expanduser("~/media"))
+                  os.path.expanduser("~/media") + f"/{id}")
 
 
 main()

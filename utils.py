@@ -165,7 +165,10 @@ def createFileStruct(device_name: str):
     os.makedirs(os.path.join(device_folder, "gcsv"),
                 exist_ok=True)     # videos, gcsv subfolders
 
-    print(f"Created folders for {device_name} at {device_folder}")
+    print(
+        f"If it didn't exist already, created folders for {device_name} at {device_folder}")
+    log(f"Created folders for {device_name} at {device_folder}")
+
     return device_folder
 
 
