@@ -17,8 +17,8 @@ def detectDevices() -> list:
     """
     Detects the USB devices connected to the computer using the `lsusb` command.
 
-    Runs the `lsusb` command (with subprocess); captures the output; 
-    returns a list of connected devices (each representing a connected USB device) 
+    Runs the `lsusb` command (with subprocess); captures the output;
+    returns a list of connected devices (each representing a connected USB device)
 
     If the lsusb fails, an error message is returned
 
@@ -42,8 +42,8 @@ def checkCamera(devices: list) -> str:
     """
     Checks for the camera ID in the list of connected devices:
 
-    looks through the list of connected USB devices and checks if any of them 
-    matches the supported camera ID defined in `config.json` 
+    looks through the list of connected USB devices and checks if any of them
+    matches the supported camera ID defined in `config.json`
 
     Parameters:
         devices (list): A list of strings representing connected USB devices.
@@ -66,7 +66,7 @@ def checkCamera(devices: list) -> str:
 
 
 def getDeviceFromSysfs(usb_device_id: str) -> str:
-    """ 
+    """
     Searches for the device path in /sys/bus/usb/devices/ using the attribute USB device ID to locate the specified USB device
     and return the path to its associated block device.
 
@@ -91,7 +91,7 @@ def getDeviceFromSysfs(usb_device_id: str) -> str:
 
 def getMountPointForDevice(device_name) -> str:
     """
-    Retrieves the mount point of a specified device using the `lsblk` command in Linux; 
+    Retrieves the mount point of a specified device using the `lsblk` command in Linux;
     executes the `lsblk` command to get the block devices and their mount points.
     It then searches the output to find the mount point corresponding to the specified device name.
 
@@ -145,9 +145,9 @@ def getUsername():
 
 def createFileStruct(device_name: str):
     """
-    Creates a file structure to organize downloaded files for a given device under the user's home directory, 
-    with a base folder named after the device name. 
-    Includes two subfolders: one for storing video files and another for storing 
+    Creates a file structure to organize downloaded files for a given device under the user's home directory,
+    with a base folder named after the device name.
+    Includes two subfolders: one for storing video files and another for storing
     GCSV files.
 
     Parameters:
@@ -159,8 +159,11 @@ def createFileStruct(device_name: str):
     base_path = os.path.expanduser(
         "~/media")  # home directory + "~/media" = base path
 
+    device_folder = os.path.join(base_path, f"{device_name}")
+
     os.makedirs(os.path.join(device_folder, "videos"), exist_ok=True)
-    os.makedirs(os.path.join(device_folder, "gcsv"), exist_ok=True)     # videos, gcsv subfolders
+    os.makedirs(os.path.join(device_folder, "gcsv"),
+                exist_ok=True)     # videos, gcsv subfolders
 
     print(f"Created folders for {device_name} at {device_folder}")
     return device_folder
@@ -171,7 +174,7 @@ def downloadFiles(origin: str, destination: str):
     Downloads files from the specified origin directory to the destination directory.
 
     Checks if the source and destination paths end with a "/". If they don't, it appends one.
-    
+
     Lists all the files in the origin directory
     Moves any files with `.MP4` or `.gcsv` extensions into subdirectories (`videos` and `gcsv`) in the destination directory.
 
@@ -182,12 +185,12 @@ def downloadFiles(origin: str, destination: str):
     Returns:
         Nothing
 
-    Procedure: 
+    Procedure:
         Creates "videos" and "gcsv" subdirectories in the destination if they do not exist.
         Files with `.MP4` extension will be moved into "videos" subdirectory.
         Files with `.gcsv` extension will be moved into a "gcsv" subdirectory.
     """
-    
+
     if (not origin.endswith("/")):
         origin += "/"
     if (not destination.endswith("/")):
