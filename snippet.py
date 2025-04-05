@@ -27,6 +27,7 @@ def select_top_segments(scored, min_distance=WINDOW):
     last_end_idx = -1  # Tracks the end index of the last selected segment
     for idx, score in scored:
         if last_end_idx == -1 or (idx >= last_end_idx):  # Ensure no overlap
+        if not selected or (idx - selected[-1][0]) < min_distance:
             selected.append((idx, score))
             last_end_idx = idx + WINDOW  # Update the end index of the current segment
         if len(selected) == 3:  # Select only 3 segments
@@ -84,6 +85,8 @@ def combine_clips(clip_paths, output_path):
     os.remove("clips.txt")
     print(f"Summary video created: {output_path}")
 
+    print(f"Summary video created: {output_path}")
+
 
 def main():
     video_dir = "/home/flamingfury/media/2aad:6371/videos/"
@@ -93,6 +96,9 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
 
     all_clips = []
+
+    video_files = sorted(
+        [f for f in os.listdir(video_dir) if f.endswith(".MP4")])
 
     video_files = sorted(
         [f for f in os.listdir(video_dir) if f.endswith(".MP4")])
@@ -106,9 +112,9 @@ def main():
                                   output_dir, idx_prefix=f"{i}")
             all_clips.extend(clips)
         else:
-            print(f"No matching .gcsv for {video_file}")
+            print(f"⚠️  No matching .gcsv for {video_file}")
 
-    final_output = "final_summary.mp4"
+    final_output = "snippet.mp4"
     combine_clips(all_clips, final_output)
 
 
