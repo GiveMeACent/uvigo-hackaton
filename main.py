@@ -9,7 +9,7 @@ def main():
             break
 
     createFileStruct(cameraId)
-    downloadFiles("/media/flamingfury/GPARTED-LIV/DCIM",
+    downloadFiles("/media/flamingfury/9C33-6BBD/DCIM",
                   os.path.expanduser("~/media"))
 
 
