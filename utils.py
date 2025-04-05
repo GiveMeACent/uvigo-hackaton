@@ -42,7 +42,6 @@ def getDeviceFromSysfs(usb_device_id) -> str:
 
     return ""
 
-
 def getMountPointForDevice(device_name) -> str:
     # Esegui lsblk per ottenere il punto di montaggio del dispositivo
     result_lsblk = subprocess.run(['lsblk', '-o', 'NAME,MOUNTPOINT'],
@@ -74,3 +73,14 @@ def getMountPointForDevice(device_name) -> str:
         return "Dispositivo non trovato"
     else:
         return f"Errore nell'eseguire lsblk: {result_lsblk.stderr}"
+
+def createFileStruct(device_name: str):
+    base_path = os.path.expanduser("~/media") # home directory + "~/media" = base path
+    
+    device_folder = os.path.join(base_path, f"{device_name}")     
+
+    os.makedirs(os.path.join(device_folder, "videos"), exist_ok=True)
+    os.makedirs(os.path.join(device_folder, "gcsv"), exist_ok=True)     # videos, gcsv subfolders
+
+    print(f"Created folders for {device_name} at {device_folder}")
+    return device_folder
