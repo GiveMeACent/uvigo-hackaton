@@ -1,10 +1,8 @@
 {
   "supported_cameras": [
     {
-      "device_id": "USBSTOR\\DISK&VEN_G1_CAMER&PROD_WASINTEK_CAMERA&REV_00.0\\00.00.01&0",
-      "device_model": "G1 camer Wasintek camera USB Device",
-      "device_model_id_model": "WASINTEK_CAMERA",
-      "device_info": "G1_CAMER"
+      "id": "2aad:6371",
+      "name": "G1 camera Runcam USB Camera"
     }
   ]
 }
