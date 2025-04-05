@@ -3,6 +3,7 @@
 import json
 import subprocess
 import os
+import shutil
 
 
 def detectDevices() -> list:
@@ -11,17 +12,18 @@ def detectDevices() -> list:
 
     Runs the `lsusb` command (with subprocess); captures the output; 
     returns a list of connected devices (each representing a connected USB device) 
-    
+
     If the lsusb fails, an error message is returned
 
     Returns:
-    
+
     list: A list of strings representing the detected devices up to the max_devices limit
-        
+
     str: An error message if the `lsusb` command fails or if no devices of specified type are found
     """
-    
-    result = subprocess.run(['lsusb'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+    result = subprocess.run(
+        ['lsusb'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     if result.returncode == 0:
         devices = result.stdout.splitlines()
         return devices
@@ -30,7 +32,7 @@ def detectDevices() -> list:
 
 
 def checkCamera(devices: list) -> str:
-"""
+    """
     Checks for the camera ID in the list of connected devices:
 
     looks through the list of connected USB devices and checks if any of them 
@@ -39,11 +41,11 @@ def checkCamera(devices: list) -> str:
     Parameters:
         devices (list): A list of strings representing connected USB devices.
                         Each string contains information about a device, such as its ID.
-                        
+
     Returns:
         str: The camera ID if a match is found, or an empty string if no match is found.
     """
-  
+
     foundId = ""
     with open("config.json") as f:
         d = json.load(f)
@@ -56,11 +58,11 @@ def checkCamera(devices: list) -> str:
     return foundId
 
 
-def getDeviceFromSysfs(usb_device_id : str) -> str:
+def getDeviceFromSysfs(usb_device_id: str) -> str:
     """ 
     Searches for the device path in /sys/bus/usb/devices/ using the attribute USB device ID to locate the specified USB device
     and return the path to its associated block device.
-    
+
     Parameters:
         usb_device_id (str): The USB device ID.
 
@@ -79,6 +81,7 @@ def getDeviceFromSysfs(usb_device_id : str) -> str:
 
     return ""
 
+
 def getMountPointForDevice(device_name) -> str:
     """
     Retrieves the mount point of a specified device using the `lsblk` command in Linux; 
@@ -94,7 +97,7 @@ def getMountPointForDevice(device_name) -> str:
              If the device is not found, returns "Device not found".
              If there's an error executing `lsblk`, returns the error message.
     """
-    
+
     # Run lsblk to get the device mount point."
     result_lsblk = subprocess.run(['lsblk', '-o', 'NAME,MOUNTPOINT'],
                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -126,6 +129,7 @@ def getMountPointForDevice(device_name) -> str:
     else:
         return f"Error executing lsblk: {result_lsblk.stderr}"
 
+
 def createFileStruct(device_name: str):
     """
     Creates a file structure to organize downloaded files for a given device under the user's home directory, 
@@ -135,20 +139,21 @@ def createFileStruct(device_name: str):
 
     Parameters:
         device_name (str): The name of the device (used to create a base folder).
-        
+
     Returns:
         str: The path to the root folder created for the device (+ "videos" and "gcsv" subfolders).
     """
-    base_path = os.path.expanduser("~/media") # home directory + "~/media" = base path
-    
-    device_folder = os.path.join(base_path, f"{device_name}")     
+    base_path = os.path.expanduser(
+        "~/media")  # home directory + "~/media" = base path
+
+    device_folder = os.path.join(base_path, f"{device_name}")
 
     os.makedirs(os.path.join(device_folder, "videos"), exist_ok=True)
-    os.makedirs(os.path.join(device_folder, "gcsv"), exist_ok=True)     # videos, gcsv subfolders
+    os.makedirs(os.path.join(device_folder, "gcsv"),
+                exist_ok=True)     # videos, gcsv subfolders
 
     print(f"Created folders for {device_name} at {device_folder}")
     return device_folder
-
 
 
 def downloadFiles(origin: str, destination: str):
