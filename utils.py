@@ -210,3 +210,22 @@ def downloadFiles(origin: str, destination: str):
 
             if (not os.path.exists(destination + folder + file)):
                 shutil.copy(origin + file, destination + folder + file)
+
+
+def getVideosList(path: str) -> list:
+    return os.listdir(path)
+
+
+def stabilizeVideo(path: str, videoName: str):
+    if (not videoName.endswith(".MP4")):
+        return
+
+    if (not path.endswith("/")):
+        path += "/"
+
+    with open("config.json") as f:
+        d = json.load(f)
+        gyroflowPath = d["gyroflow_path"]
+
+    result = subprocess.run(
+        [gyroflowPath], [path + videoName], ["-g"], [path + videoName.split(".")[0] + ".gcsv"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)

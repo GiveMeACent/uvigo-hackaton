@@ -20,5 +20,9 @@ def main():
     downloadFiles(f"/media/{getUsername()}/{folder}/DCIM",
                   os.path.expanduser("~/media") + f"/{id}")
 
+    videos = getVideosList(os.path.expanduser("~/media") + f"/{id}")
+    for video in videos:
+        stabilizeVideo(os.path.expanduser("~/media") + f"/{id}", video)
+
 
 main()

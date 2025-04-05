@@ -5,5 +5,6 @@
       "name": "G1 camera Runcam USB Camera",
       "folder": "9C33-6BBD"
     }
-  ]
+  ],
+  "gyroflow_path": "/home/giuseppe/Downloads/Gyroflow"
 }
