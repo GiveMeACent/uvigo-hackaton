@@ -146,17 +146,35 @@ def createFileStruct(device_name: str):
     base_path = os.path.expanduser(
         "~/media")  # home directory + "~/media" = base path
 
-    device_folder = os.path.join(base_path, f"{device_name}")
-
     os.makedirs(os.path.join(device_folder, "videos"), exist_ok=True)
-    os.makedirs(os.path.join(device_folder, "gcsv"),
-                exist_ok=True)     # videos, gcsv subfolders
+    os.makedirs(os.path.join(device_folder, "gcsv"), exist_ok=True)     # videos, gcsv subfolders
 
     print(f"Created folders for {device_name} at {device_folder}")
     return device_folder
 
 
 def downloadFiles(origin: str, destination: str):
+    """
+    Downloads files from the specified origin directory to the destination directory.
+
+    Checks if the source and destination paths end with a "/". If they don't, it appends one.
+    
+    Lists all the files in the origin directory
+    Moves any files with `.MP4` or `.gcsv` extensions into subdirectories (`videos` and `gcsv`) in the destination directory.
+
+    Attributes:
+        origin (str): Source directory from which files will be copied.
+        destination (str): Destination directory where files will be moved.
+
+    Returns:
+        Nothing
+
+    Procedure: 
+        Creates "videos" and "gcsv" subdirectories in the destination if they do not exist.
+        Files with `.MP4` extension will be moved into "videos" subdirectory.
+        Files with `.gcsv` extension will be moved into a "gcsv" subdirectory.
+    """
+    
     if (not origin.endswith("/")):
         origin += "/"
     if (not destination.endswith("/")):
