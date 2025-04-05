@@ -2,7 +2,8 @@
   "supported_cameras": [
     {
       "id": "2aad:6371",
-      "name": "G1 camera Runcam USB Camera"
+      "name": "G1 camera Runcam USB Camera",
+      "folder": "9C33-6BBD"
     }
   ]
 }

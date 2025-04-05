@@ -8,8 +8,9 @@ def main():
         if (cameraId != ""):
             break
 
-    deviceName = getDeviceFromSysfs(cameraId)
-    mountPoint = getMountPointForDevice(deviceName)
+    createFileStruct(cameraId)
+    downloadFiles("/media/flamingfury/GPARTED-LIV/DCIM",
+                  os.path.expanduser("~/media"))
 
 
 main()

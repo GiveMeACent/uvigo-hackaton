@@ -3,6 +3,7 @@
 import json
 import subprocess
 import os
+import shutil
 
 
 def detectDevices() -> list:
@@ -42,45 +43,68 @@ def getDeviceFromSysfs(usb_device_id) -> str:
 
     return ""
 
-def getMountPointForDevice(device_name) -> str:
-    # Esegui lsblk per ottenere il punto di montaggio del dispositivo
-    result_lsblk = subprocess.run(['lsblk', '-o', 'NAME,MOUNTPOINT'],
-                                  stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-    if result_lsblk.returncode == 0:
-        lsblk_output = result_lsblk.stdout.splitlines()
+# def getMountPointForDevice(device_name) -> str:
+#     # Esegui lsblk per ottenere il punto di montaggio del dispositivo
+#     result_lsblk = subprocess.run(['lsblk', '-o', 'NAME,MOUNTPOINT'],
+#                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-        # Controlliamo l'output di lsblk per eventuali problemi
-        print("Output di lsblk:")
-        for line in lsblk_output:
-            print(line)
+#     if result_lsblk.returncode == 0:
+#         lsblk_output = result_lsblk.stdout.splitlines()
 
-        # Iteriamo sulle righe dell'output di lsblk
-        # Salta la prima riga dell'output (intestazione)
-        for line in lsblk_output[1:]:
-            columns = line.split()
-            if len(columns) >= 2:  # Verifica che ci siano almeno due colonne
-                device = columns[0]
-                mount_point = columns[1]
+#         # Controlliamo l'output di lsblk per eventuali problemi
+#         # print("Output di lsblk:")
+#         # for line in lsblk_output:
+#         #     print(line)
 
-                # Controlla se il nome del dispositivo corrisponde
-                if device == device_name:
-                    if mount_point:
-                        return mount_point  # Restituisci il punto di montaggio
-                    else:
-                        return "Dispositivo non montato"  # Se non è montato
-        # Se il dispositivo non è stato trovato nell'output
-        return "Dispositivo non trovato"
-    else:
-        return f"Errore nell'eseguire lsblk: {result_lsblk.stderr}"
+#         # Iteriamo sulle righe dell'output di lsblk
+#         # Salta la prima riga dell'output (intestazione)
+#         for line in lsblk_output[1:]:
+#             columns = line.split()
+#             if len(columns) >= 2:  # Verifica che ci siano almeno due colonne
+#                 device = columns[0]
+#                 mount_point = columns[1]
+
+#                 # Controlla se il nome del dispositivo corrisponde
+#                 if device == device_name:
+#                     if mount_point:
+#                         return mount_point  # Restituisci il punto di montaggio
+#                     else:
+#                         return "Dispositivo non montato"  # Se non è montato
+#         # Se il dispositivo non è stato trovato nell'output
+#         return "Dispositivo non trovato"
+#     else:
+#         return f"Errore nell'eseguire lsblk: {result_lsblk.stderr}"
+
 
 def createFileStruct(device_name: str):
-    base_path = os.path.expanduser("~/media") # home directory + "~/media" = base path
-    
-    device_folder = os.path.join(base_path, f"{device_name}")     
+    # home directory + "~/media" = base path
+    base_path = os.path.expanduser("~/media")
+
+    device_folder = os.path.join(base_path, f"{device_name}")
 
     os.makedirs(os.path.join(device_folder, "videos"), exist_ok=True)
-    os.makedirs(os.path.join(device_folder, "gcsv"), exist_ok=True)     # videos, gcsv subfolders
+    os.makedirs(os.path.join(device_folder, "gcsv"),
+                exist_ok=True)     # videos, gcsv subfolders
 
     print(f"Created folders for {device_name} at {device_folder}")
     return device_folder
+
+
+def downloadFiles(origin: str, destination: str):
+    if (not origin.endswith("/")):
+        origin += "/"
+    if (not destination.endswith("/")):
+        destination += "/"
+
+    files = os.listdir(origin)
+
+    for file in files:
+        if (file.endswith(".MP4") or file.endswith(".gcsv")):
+            if (file.endswith(".MP4")):
+                folder = "videos/"
+            if (file.endswith(".gcsv")):
+                folder = "gcsv/"
+
+            if (not os.path.exists(destination + folder + file)):
+                shutil.copy(origin + file, destination + folder + file)
