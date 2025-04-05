@@ -24,7 +24,7 @@ def checkCamera(devicesDict: dict) -> bool:
       if (supported_camera["device_id"] == device_id and supported_camera["device_model"] == device_info[ID_MODEL] and supported_camera["device_model_id_model"] == device_info[ID_MODEL_ID] and supported_camera["device_info"] == device_info[ID_VENDOR_ID]) :
         found = True
         print(f"[INFO] Supported camera connected: {model_id} ({vendor_id})")
-        createFileStruct(base_storage_path, model_id)
+        createFileStruct(storage_path model_id)
         break
   
   return found
