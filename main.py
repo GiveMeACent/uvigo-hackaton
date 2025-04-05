@@ -1,6 +1,8 @@
 from utils import *
 
 def main() :
-  detectDevices()
+  while True:
+    devices = detectDevices()
+    print(checkCamera(devices))
   
 main()

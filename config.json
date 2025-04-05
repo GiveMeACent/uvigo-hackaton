@@ -1,9 +1,9 @@
 {
   "supported_cameras": [
     {
-      "device_id": "USBSTORDISK&VEN_G1_CAMER&PROD_WASINTEK_CAMERA&REV_00.0\\00.00.01&0",
-      "device_model": "G1 camer Wasintek camera USB Device",
-      "devide_mode_id_model": "WASINTEK_CAMERA",
+      "device_id": "USBSTOR\\DISK&VEN_G1_CAMER&PROD_WASINTEK_CAMERA&REV_00.0\\00.00.01&0",
+      "device_model": "G1 camer Wasintek camera USB Device",
+      "device_model_id_model": "WASINTEK_CAMERA",
       "device_info": "G1_CAMER"
     }
   ]
