@@ -23,7 +23,7 @@ def checkCamera(devicesDict: dict) -> bool:
     for device_id, device_info in devicesDict.items() :
       if (supported_camera["device_id"] == device_id and supported_camera["device_model"] == device_info[ID_MODEL] and supported_camera["device_model_id_model"] == device_info[ID_MODEL_ID] and supported_camera["device_info"] == device_info[ID_VENDOR_ID]) :
         found = True
-        print(f"[INFO] Supported camera connected: {model_id} ({vendor_id})")
+        print(f"Supported camera connected: {model_id} ({vendor_id})")
         createFileStruct(model_id)
         break
   
