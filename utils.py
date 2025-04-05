@@ -4,6 +4,13 @@ import json
 import subprocess
 import os
 import shutil
+import pwd
+
+
+def log(message: str):
+    f = open("./logs.txt", "a")
+    f.write(message + "\n")
+    f.close()
 
 
 def detectDevices() -> list:
@@ -128,6 +135,12 @@ def getMountPointForDevice(device_name) -> str:
         return "Device not found"
     else:
         return f"Error executing lsblk: {result_lsblk.stderr}"
+
+
+def getUsername():
+    # Use 'os.getuid()' to get the user ID of the current user, and then pass it to 'pwd.getpwuid' to get the user information.
+    # The '[0]' index extracts the username from the user information.
+    return pwd.getpwuid(os.getuid())[0]
 
 
 def createFileStruct(device_name: str):
