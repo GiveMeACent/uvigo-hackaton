@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 def createFileStruct(device_name: str):
-    base_path = os.path.expanduser("~/media") # home directory + ~/media = base path
+    base_path = os.path.expanduser("~/media") # home directory + "~/media" = base path
     
     device_folder = os.path.join(base_path, f"{device_name}")     
 
