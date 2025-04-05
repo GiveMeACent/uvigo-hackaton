@@ -1,0 +1,6 @@
+{
+  "supported_cameras": [
+    { "vendor_id": "046d", "product_id": "0825", "name": "Logitech C270" },
+    { "vendor_id": "1bcf", "product_id": "2b95", "name": "Sunplus Webcam" }
+  ]
+}
