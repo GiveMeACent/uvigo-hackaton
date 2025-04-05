@@ -21,9 +21,8 @@ def score_segments(df):
 
 def select_top_segments(scored, min_distance=WINDOW):
     selected = []
-    used_indices = set()
     for idx, score in scored:
-        if all(abs(idx - s[0]) >= min_distance for s in selected):
+        if not selected or (idx - selected[-1][0]) < min_distance:
             selected.append((idx, score))
         if len(selected) == 3:
             break
@@ -74,7 +73,7 @@ def combine_clips(clip_paths, output_path):
     ]
     subprocess.run(cmd)
     os.remove("clips.txt")
-    print(f"✅ Summary video created: {output_path}")
+    print(f"Summary video created: {output_path}")
 
 def main():
     video_dir = "./videos"
@@ -84,7 +83,7 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
 
     all_clips = []
-
+    
     video_files = sorted([f for f in os.listdir(video_dir) if f.endswith(".MP4")])
     for i, video_file in enumerate(tqdm(video_files, desc="Videos")):
         base_name = os.path.splitext(video_file)[0]
@@ -95,9 +94,9 @@ def main():
             clips = process_video(video_path, gcsv_path, output_dir, idx_prefix=f"{i}")
             all_clips.extend(clips)
         else:
-            print(f"⚠️  No matching .gcsv for {video_file}")
+            print(f"No matching .gcsv for {video_file}")
 
-    final_output = "final_summary.mp4"
+    final_output = "snippet.mp4"
     combine_clips(all_clips, final_output)
 
 if __name__ == "__main__":
