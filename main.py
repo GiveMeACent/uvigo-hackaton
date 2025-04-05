@@ -1,7 +1,6 @@
 from utils import *
 
 def main() :
-  devices = detectDevices()
-  print(devices)
+  detectDevices()
   
 main()

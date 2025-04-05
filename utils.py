@@ -1,15 +1,19 @@
-import re
-import subprocess
+from usbmonitor import USBMonitor
+from usbmonitor.attributes import ID_MODEL, ID_MODEL_ID, ID_VENDOR_ID
 
-def detectDevices() -> list :
-  device_re = re.compile(b"Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s(?P<id>\w+:\w+)\s(?P<tag>.+)$", re.I)
-  df = subprocess.check_output("lsusb")
-  devices = []
-  for i in df.split(b'\n'):
-      if i:
-          info = device_re.match(i)
-          if info:
-              dinfo = info.groupdict()
-              dinfo['device'] = '/dev/bus/usb/%s/%s' % (dinfo.pop('bus'), dinfo.pop('device'))
-              devices.append(dinfo)
-  return devices
+
+def detectDevices() -> list: 
+  # Create the USBMonitor instance
+  monitor = USBMonitor()
+
+  # Get the current devices
+  devicesDict = monitor.get_available_devices()
+
+  # Print them
+  # for device_id, device_info in devicesDict.items():
+  #     print(f"DEVICE ID: {device_id}\n DEVICE MODEL: {device_info[ID_MODEL]}\n DEVICE ID MODEL ID: ({device_info[ID_MODEL_ID]}\n - DEVICE INFO: {device_info[ID_VENDOR_ID]})")
+  
+  return devicesDict.items()
+
+def checkCamera(devicesDict: list) -> None:
+  return None
